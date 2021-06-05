@@ -50,7 +50,7 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 const int dtime = 500;
 
 void setup() {
-  analogWrite(6, 100);
+//  analogWrite(6, 100);
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
 }
@@ -66,6 +66,8 @@ void rm(int pos) {
 }
 
 void loop() {
+  lcd.clear();
+  
   delay(2000);
   sChar("S");
   sChar("H");
@@ -142,7 +144,7 @@ void loop() {
   sChar("R");
 
   delay(1000);
-
+  sChar(" ");
   sChar("X");
   sChar("D");
   
