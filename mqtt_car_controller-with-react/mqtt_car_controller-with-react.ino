@@ -55,10 +55,6 @@ Adafruit_MQTT_Subscribe downButton = Adafruit_MQTT_Subscribe(&mqtt, "car/remote/
 // Bug workaround for Arduino 1.6.6, it seems to need a function declaration
 // for some reason (only affects ESP8266, likely an arduino-builder bug).
 void MQTT_connect();
-//int D0 = 16;
-//int D1 = 5;
-//int D2 = 4;
-//int D3 = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -110,8 +106,10 @@ void loop() {
   // try to spend your time here
 
   Adafruit_MQTT_Subscribe *subscription;
+  int currentBtn = 0;
   while ((subscription = mqtt.readSubscription(5000))) {
     if (subscription == &upButton) {
+      currentBtn = 0;
       if (strcmp((char *)upButton.lastread,"0") == 0) {
         digitalWrite(D0, LOW);
         digitalWrite(D1, LOW);
@@ -136,8 +134,13 @@ void loop() {
         digitalWrite(D2, LOW);
         digitalWrite(D3, LOW);
       } else if (strcmp((char *)leftButton.lastread,"1") == 0) {
-        digitalWrite(D0, HIGH);
-        digitalWrite(D1, LOW);
+        if (currentBtn == 0) {
+          digitalWrite(D0, HIGH);
+          digitalWrite(D1, LOW);
+        } else {
+          digitalWrite(D0, LOW);
+          digitalWrite(D1, HIGH);
+        }
         digitalWrite(D2, LOW);
         digitalWrite(D3, LOW);
       } else {
@@ -156,8 +159,13 @@ void loop() {
       } else if (strcmp((char *)rightButton.lastread,"1") == 0) {
         digitalWrite(D0, LOW);
         digitalWrite(D1, LOW);
-        digitalWrite(D2, LOW);
-        digitalWrite(D3, HIGH);
+        if (currentBtn == 0) {
+          digitalWrite(D2, LOW);
+          digitalWrite(D3, HIGH);
+        } else {
+          digitalWrite(D2, HIGH);
+          digitalWrite(D3, LOW);
+        }
       } else {
         digitalWrite(D0, LOW);
         digitalWrite(D1, LOW);
@@ -166,6 +174,7 @@ void loop() {
       }
     }
     if (subscription == &downButton) {
+      currentBtn = 1;
       if (strcmp((char *)downButton.lastread,"0") == 0) {
         digitalWrite(D0, LOW);
         digitalWrite(D1, LOW);
@@ -194,6 +203,7 @@ void loop() {
 // Should be called in the loop function and it will take care if connecting.
 void MQTT_connect() {
   int8_t ret;
+  digitalWrite(LED_BUILTIN, LOW);
 
   // Stop if already connected.
   if (mqtt.connected()) {
@@ -215,5 +225,5 @@ void MQTT_connect() {
        }
   }
   Serial.println("MQTT Connected!");
-  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
