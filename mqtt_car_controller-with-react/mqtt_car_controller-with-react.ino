@@ -203,7 +203,6 @@ void loop() {
 // Should be called in the loop function and it will take care if connecting.
 void MQTT_connect() {
   int8_t ret;
-  digitalWrite(LED_BUILTIN, LOW);
 
   // Stop if already connected.
   if (mqtt.connected()) {
@@ -225,5 +224,4 @@ void MQTT_connect() {
        }
   }
   Serial.println("MQTT Connected!");
-  digitalWrite(LED_BUILTIN, HIGH);
 }
