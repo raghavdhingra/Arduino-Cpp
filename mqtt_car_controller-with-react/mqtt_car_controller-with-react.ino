@@ -21,6 +21,8 @@
 
 /************************* WiFi Access Point *********************************/
 
+//#define WLAN_SSID       "Dhingra"
+//#define WLAN_PASS       "alohomora"
 #define WLAN_SSID       "Dhingra"
 #define WLAN_PASS       "alohomora"
 
